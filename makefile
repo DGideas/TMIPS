@@ -1,10 +1,17 @@
+productive_build = g++ tmips.cpp -o bin/tmips --std=c++11 -O3
+test_build = g++ tmips.cpp -o bin/tmips --std=c++11 -O0
+binary_clean = rm bin/tmips
 build: tmips.cpp
-	g++ tmips.cpp -o tmips --std=c++11 -O3
+	$(productive_build)
+t: tmips.cpp
+	$(test_build)
+	$(binary_clean)
 test: tmips.cpp
-	g++ tmips.cpp -o tmips --std=c++11 -O0
-	rm tmips
+	$(test_build)
+	./tmips
+	$(binary_clean)
 clean:
-	rm tmips
+	$(binary_clean)
 commit:
 	git add -A .
 	git commit -m "minor changes and improvements"
