@@ -19,6 +19,8 @@ using namespace std;
 
 void errorExit(const string& _errorMsg = "")
 {
+	cout<<APP_NAME<<": "<<INTERFACE_WORD_ERROR<<": "<<_errorMsg<<endl;
+	exit(0);
 	return;
 }
 
@@ -146,7 +148,10 @@ void TmipsConfig::parseArgs(const vector<string>& _args)
 				}
 				else if (mode == argParseLevel2)
 				{
-					exit(0);
+					string errorMsg(INTERFACE_UNRECOGNIZED_CMD);
+					errorMsg += _args[argsIndex];
+					errorMsg += "\"";
+					errorExit(errorMsg);
 				}
 			}
 		}
@@ -162,7 +167,8 @@ TmipsConfig::TmipsConfig()
 void startupScreen()
 {
 	const string tmipsVersion = "0.1 alpha";
-	cout<<"TMIPS "<<tmipsVersion<<" (";
+	
+	cout<<APP_NAME<<" "<<tmipsVersion<<" (";
 	#ifdef DEBUG
 		cout<<"debug";
 	#else
