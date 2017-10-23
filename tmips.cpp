@@ -1,4 +1,4 @@
-// TMIPS
+// TMIPS assembler, disassembler, debugger and simulator
 // dgideas@outlook.com
 #include <iostream>
 #include <string>
@@ -6,10 +6,20 @@
 #include <map>
 #include <stack>
 #include <sstream>
+#include <cmath>
+#include <ctime>
+#include <cstdlib>
+
+#include "interface.hpp"
 
 using namespace std;
 
 #define DEBUG
+
+void errorExit(const string& _errorMsg = "")
+{
+	return;
+}
 
 string strToLower(const string& _raw)
 {
@@ -110,13 +120,36 @@ TmipsConfig& TmipsConfig::init()
 	return instance;
 }
 
-void TmipsConfig::parseArgs(const vector<string>& args)
+void TmipsConfig::parseArgs(const vector<string>& _args)
 {
+	// Using autometa to parse the command line args
 	enum parseMode
 	{
-		normal,
+		normal, argParseLevel1, argParseLevel2,
 	};
-	parseMode mode = normal;
+	parseMode mode;
+	for (size_t argsIndex=1; argsIndex!=_args.size(); argsIndex++)
+	{
+		mode = normal;
+		for (const auto& letter: _args[argsIndex])
+		{
+			if (letter == '-')
+			{
+				if (mode == normal)
+				{
+					mode = argParseLevel1;
+				}
+				else if (mode == argParseLevel1)
+				{
+					mode = argParseLevel2;
+				}
+				else if (mode == argParseLevel2)
+				{
+					exit(0);
+				}
+			}
+		}
+	}
 	return;
 }
 
@@ -127,7 +160,24 @@ TmipsConfig::TmipsConfig()
 
 int main(int argc, char* argv[])
 {
-	cout<<argc<<endl;
+	const string tmipsVersion = "0.1 alpha";
+	cout<<"TMIPS "<<tmipsVersion<<" (";
+	#ifdef DEBUG
+		cout<<"debug";
+	#else
+		cout<<"default";
+	#endif
+	cout<<", "<<__DATE__<<", "<<__TIME__<<")"<<endl<<"[";
+	#ifdef _MSC_VER
+		cout<<"cl.exe "<<_MSC_VER;
+	#elif __GNUC__
+		cout<<"GCC "<<__GNUC__<<"."<<__GNUC_MINOR__<<
+			"."<<__GNUC_PATCHLEVEL__;
+	#else
+		cout<<"DGideas";
+	#endif
+	cout<<" "<<__cplusplus<<"] "<<int(sizeof(int*)*8)<<INTERFACE_WORD_BIT<<endl;
+	cout<<INTERFACE_HINT<<endl;
 	if (argc <= 1)
 	{
 		cout<<"No arguments are given."<<endl;
@@ -140,7 +190,11 @@ int main(int argc, char* argv[])
 		{
 			args.push_back(argv[argCount]);
 		}
-		
+		tmipsConfig.parseArgs(args);
+	}
+	if (tmipsConfig.printVersion)
+	{
+		cout<<"1.0"<<endl;
 	}
 	return EXIT_SUCCESS;
 }
