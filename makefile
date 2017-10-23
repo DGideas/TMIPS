@@ -1,6 +1,6 @@
-productive_build = g++ tmips.cpp -o bin/tmips --std=c++11 -O3
-test_build = g++ tmips.cpp -o bin/tmips --std=c++11 -O0
-binary_clean = rm bin/tmips
+productive_build = g++ tmips.cpp -o tmips --std=c++11 -O3
+test_build = g++ tmips.cpp -o tmips --std=c++11 -O0
+binary_clean = rm tmips
 build: tmips.cpp
 	$(productive_build)
 t: tmips.cpp
