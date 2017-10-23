@@ -15,6 +15,7 @@
 using namespace std;
 
 #define DEBUG
+// #undef DEBUG
 
 void errorExit(const string& _errorMsg = "")
 {
@@ -158,7 +159,7 @@ TmipsConfig::TmipsConfig()
 	return;
 }
 
-int main(int argc, char* argv[])
+void startupScreen()
 {
 	const string tmipsVersion = "0.1 alpha";
 	cout<<"TMIPS "<<tmipsVersion<<" (";
@@ -176,11 +177,20 @@ int main(int argc, char* argv[])
 	#else
 		cout<<"DGideas";
 	#endif
-	cout<<" "<<__cplusplus<<"] "<<int(sizeof(int*)*8)<<INTERFACE_WORD_BIT<<endl;
+	cout<<" "<<__cplusplus<<"] "<<INTERFACE_WORD_RUN_ON<<
+		" "<<int(sizeof(int*)*8)<<INTERFACE_WORD_BIT<<endl;
 	cout<<INTERFACE_HINT<<endl;
+}
+
+int main(int argc, char* argv[])
+{
+	startupScreen();
 	if (argc <= 1)
 	{
-		cout<<"No arguments are given."<<endl;
+		cout<<">>> ";
+		int a;
+		cin>>a;
+		cout<<endl;
 		return EXIT_FAILURE;
 	}
 	TmipsConfig tmipsConfig = TmipsConfig::init();
@@ -191,10 +201,6 @@ int main(int argc, char* argv[])
 			args.push_back(argv[argCount]);
 		}
 		tmipsConfig.parseArgs(args);
-	}
-	if (tmipsConfig.printVersion)
-	{
-		cout<<"1.0"<<endl;
 	}
 	return EXIT_SUCCESS;
 }
