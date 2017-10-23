@@ -14,3 +14,6 @@ TMIPS是用于THCO-MIPS指令集的汇编器、反汇编器、调试器和模拟
 王万霖 北京石油化工学院 dgideas@outlook.com
 
 DGideas from Beijing Institute of Petrochemical Technology
+
+## See also
+* [Dorado](https://github.com/bipt-urt/dorado) is a biptC compiler for THCO-MIPS.
