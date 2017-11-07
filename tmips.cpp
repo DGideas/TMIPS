@@ -125,17 +125,21 @@ TmipsConfig& TmipsConfig::init()
 
 void TmipsConfig::parseArgs(const vector<string>& _args)
 {
-	// Using autometa to parse the command line args
+	// Parse command line argument with autometa
 	enum parseMode
 	{
-		normal, argParseLevel1, argParseLevel2,
+		normal, argParseLevel1, argParseLevel2, literal, 
 	};
 	parseMode mode;
 	for (size_t argsIndex=1; argsIndex!=_args.size(); argsIndex++)
 	{
-		mode = normal;
+		mode = normal; // reset the parsing mode to normal mode
+		string cmdStr = ""; // Using std::string to storage command line keyword
 		for (const auto& letter: _args[argsIndex])
 		{
+			#ifdef DEBUG
+			cout<<"Parse letter: "<<letter<<"@"<<mode<<endl;
+			#endif
 			if (letter == '-')
 			{
 				if (mode == normal)
@@ -152,6 +156,31 @@ void TmipsConfig::parseArgs(const vector<string>& _args)
 					errorMsg += _args[argsIndex];
 					errorMsg += "\"";
 					errorExit(errorMsg);
+				}
+			}
+			else if (letter == "\"")
+			{
+				if (mode == normal)
+				{
+					mode = literal;
+				}
+				else if (mode == argParseLevel1)
+				{
+					string errorMsg(INTERFACE_UNRECOGNIZED_CMD);
+					errorMsg += _args[argsIndex];
+					errorMsg += "\"";
+					errorExit(errorMsg);
+				}
+				else if (mode == argParseLevel2)
+				{
+					string errorMsg(INTERFACE_UNRECOGNIZED_CMD);
+					errorMsg += _args[argsIndex];
+					errorMsg += "\"";
+					errorExit(errorMsg);
+				}
+				else if (mode == literal)
+				{
+					
 				}
 			}
 		}
