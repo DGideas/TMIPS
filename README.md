@@ -19,3 +19,4 @@ DGideas from Beijing Institute of Petrochemical Technology
 
 ## See also
 * [Dorado](https://github.com/bipt-urt/dorado) is a biptC compiler for THCO-MIPS.
+* [Stardust](https://github.com/bipt-urt/Stardust) is a CPU written by VHDL designed for THCO-MIPS with pipeline support.
